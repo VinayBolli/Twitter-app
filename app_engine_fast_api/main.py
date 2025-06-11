@@ -1,10 +1,7 @@
 import os
 
-# Use local path when running locally
-if os.environ.get("ENV") != "RENDER":
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../assignment-2-418521-b54c86bbfbf4.json"
-else:
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/etc/secrets/firebase-creds.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/etc/secrets/firebase-creds.json"
+
 
 
 
