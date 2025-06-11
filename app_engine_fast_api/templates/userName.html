@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',path='/styles.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+      integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+      crossorigin="anonymous"></script>
+    <script type="module" src="{{url_for('static',path='/firebase-login.js')}}"></script>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Home</a>
+        </div>
+        <!-- <form class="d-flex">
+          <a class="navbar-brand">{{user_token.email}} - </a>
+          <button type="submit" hidden="true" id="sign-out" class="btn btn-primary">Sign out</button>
+        </form> -->
+      </nav>
+      <form class="d-flex">
+        <button type="submit" hidden="true" id="sign-out" class="btn btn-primary">Sign out</button>
+      </form>
+  <form class="dropdown-menu p-4" action="/updateUserName"method = "post" novalidate 
+   style="display: block;margin-left: 37%; min-width: 25rem;margin-top: 12%;">
+      <div class="mb-3">
+        <label for="roomName"  class="form-label">User Name : <b> </b></label> <br>
+        <input type="text"onkeyup="checkDuplicate()" class="form-control" id="newUsername" name="newUsername" value="">
+      </div>
+      <button type="submit" id ="namebtn" class="btn btn-primary">Set Username</button>
+      <span id="duplicateMessage" style="color: red;">{{error_message}}</span>
+      <span id="duplicateMessagee" style="color: red;display: none;">This username is already exists.</span>
+
+    </form>
+
+    {% for name in user_names %}
+    <h5 class="card-title" hidden >{{ name }}</h5>
+    {% endfor %}
+</body>
+<script>
+
+function consoleAllNames() {
+    var allNames = [];
+    var hiddenElements = document.querySelectorAll('h5.card-title[hidden]');
+    hiddenElements.forEach(function(element) {
+        allNames.push(element.innerText.trim());
+    });
+    console.log(allNames);
+    return allNames;
+}
+function checkDuplicate() {
+        var inputName = document.getElementById('newUsername').value.toLowerCase();
+        var allNames = consoleAllNames().map(function(name) {
+        return name.toLowerCase(); 
+        });
+        
+        var duplicateMessage = document.getElementById('duplicateMessagee');
+        var setUserBtn = document.getElementById('namebtn');
+
+        if (allNames.includes(inputName)) {
+            duplicateMessage.style.display = 'block';
+            setUserBtn.disabled = true;
+        } else {
+            duplicateMessage.style.display = 'none';
+            setUserBtn.disabled = false; 
+        }
+    }
+
+</script>
+</html>

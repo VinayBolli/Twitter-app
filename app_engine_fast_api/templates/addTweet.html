@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.84.0">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',path='/styles.css')}}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+  <script type="module" src="{{url_for('static',path='/firebase-login.js')}}"></script>
+  <style>
+   
+
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      margin-top: 20px;
+    }
+
+    .tweet-form {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .tweet-input {
+      width: 100%;
+      height: 100px;
+      resize: none;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .tweet-count {
+      color: #6c757d;
+      margin-bottom: 10px;
+      text-align: right;
+    }
+
+    .add-tweet-btn {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Home</a>
+    </div>
+  </nav>
+  <div class="container">
+    {% if user_token %}
+
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="tweet-form">
+          <form action="/updateTweet" method="post" enctype="multipart/form-data" novalidate>
+            <textarea class="tweet-input" rows="4" maxlength="140" name="newTweet" oninput="checkLength()"
+              placeholder="What's happening?" required></textarea>
+            <div class="mb-3">
+              <label for="tweetImage" class="form-label">Upload Image:</label>
+              <input type="file" class="form-control" id="tweetImage" name="tweetImage"onchange="validateFileType()">
+            </div>
+            <div class="tweet-count"><span id="tweetLength">0</span>/140</div>
+            <button type="submit" class="btn btn-primary add-tweet-btn">Add Tweet</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    {% endif %}
+  </div>
+</body>
+<script>
+  function checkLength() {
+    var tweetLength = document.querySelector('.tweet-input').value.length;
+    document.getElementById('tweetLength').innerText = tweetLength;
+  }
+
+
+  function validateFileType() {
+    const fileInput = document.getElementById('tweetImage');
+    const filePath = fileInput.value;
+    if (!filePath.match(/\.jpg$|\.png$/i)) {
+        alert("Please upload a valid JPG or PNG file.");
+        fileInput.value = '';
+    }
+}
+</script>
+</html>

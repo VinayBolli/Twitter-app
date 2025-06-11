@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.84.0">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',path='/styles.css')}}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+  <script type="module" src="{{url_for('static',path='/firebase-login.js')}}"></script>
+  <style>
+    .rooms {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      border-bottom: 2px solid #333;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+    }
+
+    .disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .tweet {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .username {
+      font-weight: bold;
+      margin-right: 5px;
+    }
+
+    .email {
+      color: #888;
+      font-size: 0.9em;
+    }
+
+    .posted-date {
+      color: #888;
+      font-size: 0.9em;
+      float: right;
+    }
+    .editBtn{
+      display: inline-block;
+    font-weight: 300;
+    line-height: 1;
+    color: #212529;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 0.360rem 0.60rem;
+    font-size: 0.8rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+
+
+
+    .login-container {
+            margin: 0 auto;
+            max-width: 400px;
+            padding: 20px;
+            margin-top: 100px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1da1f2;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+        .form-control {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn-primary {
+            background-color: #1da1f2;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #0d8bf0;
+        }
+        .text-muted {
+            text-align: center;
+            margin-top: 20px;
+        }
+  </style> 
+</head>
+
+<body>
+ 
+
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Twitter</a>
+      {% if user_token %}
+      <a class="btn btn-outline-success" style="margin-left: 54%;color: white;border-color: white;" href="/addTweet">Add
+        Tweet</a>
+
+      <form class="d-flex">
+        <a class="navbar-brand" style="text-decoration: underline;" href="/Profile"><i class="bi bi-person-circle"></i> {{UserName}} &nbsp; </a>
+        {% endif %}
+
+        <button type="submit" hidden="true" id="sign-out" class="btn btn-primary">Sign out</button>
+      </form>
+
+    </div>
+  </nav> <br>
+
+  <div class="container"id="login-box" hidden="true">
+    <div class="login-container">
+        <h2>Login to Twitter</h2>
+        <form >
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            <button type="button" id="login" class="btn btn-primary">Log in</button> <br> <br>
+            <button type="button" id="sign-up" class="btn btn-primary">Sign up</button>
+        </form>
+    </div>
+</div>
+
+  
+  {% if user_token %} 
+  <div class="container" style="">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-5">
+        <form class="d-flex align-items-center" action="/filter-by-string" method="post">
+          <select id="filterdropdown" style="width: 23%;" name="filter_criteria" class="form-select"
+            onchange="onFilterChange(event)">
+            <option value="" selected>Filter By</option>
+            <option value="username">Username</option>
+            <option value="tweetContent">Tweet</option>
+          </select> &nbsp;&nbsp;
+          <div id="input-container" style="display: flex">
+            <input id="searchInput" class="form-control me-2" name="search_input" style="width: 250px;"
+              placeholder="Search" aria-label="Search">
+          </div>
+          <button class="btn btn-outline-success" id="searchBtn" type="submit">Search</button>
+        </form>
+
+      </div>
+      <div class="col-md-3"></div>
+    </div> <br><br>
+
+
+    {% if AllTweets %}
+    {% for user in AllTweets %}
+    <div class="row">
+      <div class=""></div>
+      <div class="col-md-10">
+  <div class="card" style="width: 45rem;margin-left: 23%;">
+      <img src="{{user.imageUrl}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title"><i class="bi bi-person-circle"></i>  {{user.username}}</h5>
+        <h5 class="card-title"><i class="bi bi-envelope-fill"></i>  {{user.userEmail}}</h5>
+        <p class="card-text"><i class="bi bi-twitter"></i>  {{user.tweetContent}}.</p>
+        <div class="posted-date" style="position: absolute;color: grey;margin-left: 28%;">Posted on {{user.date}}</div>
+           </div>
+    </div>
+    <hr style="height: 4px;opacity: 3.25;margin-left: 13%;">
+  </div>
+    <div class=""></div>
+
+  </div>
+  {% endfor %}
+    {% endif %}
+
+
+
+
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      {% if user_info %}
+      {% for user in user_info %}
+      <div class="col-md-4">
+        <div class="card">
+           
+          <div class="card-body">
+
+            <h5 class="card-title mt-3"><i class="bi bi-person-circle"></i> {{ user.username }}</h5>
+            <a href="/userProfile?username={{ user.username }}" class="btn btn-primary"><i
+                class="bi bi-person-check-fill"></i> View Profile</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="col">
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      {% if user_tweet %}
+      {% for user in user_tweet %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <img src="{{user.imageUrl}}" class="card-img-top" alt="Image" style="width: 100%; height: 220px;">
+          <div class="card-body">
+            <h5 class="card-title"><i class="bi bi-person-circle"></i> {{ user.username }}</h5>
+            <p class="card-text"><i class="bi bi-twitter"></i> {{ user.tweetContent }}</p>
+            <p class="card-text"><i class="bi bi-envelope-fill"></i> {{ user.userEmail }}</p>
+            <p class="card-text"><i class="bi bi-calendar-fill"></i> {{ user.date }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="col">
+      </div>
+      {% endif %}
+    </div>
+
+
+
+  </div>
+  {% endif %}
+
+
+</body>
+
+
+<script type="text/javascript">
+  function checkLength() {
+    var maxLength = 140;
+    var textArea = document.getElementById("myTextarea");
+    var remaining = maxLength - textArea.value.length;
+    if (remaining < 0) {
+      textArea.value = textArea.value.slice(0, maxLength);
+    }
+  }
+  
+
+
+  function myFunction() {
+    console.log("testing");
+    localStorage.setItem("signup", Date.now());
+  }
+</script>
+
+</html>
